@@ -24,12 +24,6 @@ const cadastroRoute = require('./routes/cadastro');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const route = router.get('/', (req,res,next) => {
-    res.status(200).send({
-        title:"API"
-    });
-});
-
 
 app.use('/',indexRoute);
 app.use('/cadastrar',cadastroRoute);

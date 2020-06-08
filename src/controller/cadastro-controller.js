@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 const Cadastro = mongoose.model('Cadastro');
+const repository = require('../repository/cad-repository');
 
 
-exports.get = (req,res,next) => {
-    Cadastro.find({}).then( data => {
-         res.send(data);
-     }).catch((err)=>{
-        res.status(400).json({
-            error: true,
-            message: "nenhum cadastro encontrado"
+exports.get = async(req, res, next) => {
+    try {
+        var data = await repository.get();
+        res.status(200).send(data);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Nenhum cadastro encontrado'
         });
-     });
+    }
 }
 
 exports.post = (req,res,next) => {
@@ -23,25 +24,28 @@ exports.post = (req,res,next) => {
    })
 };
 
-exports.put = (req,res,next) => {
-    Cadastro.findByIdAndUpdate({_id: req.params.id},req.body, {upsert: true}, 
-        function(err){
-        if (err) {
-            res.status(500).json({ error: err.message });
-            res.end();
-            return;
-        }
-        res.json(req.body);
-        res.end();
-    })
+exports.put = async(req, res, next) => {
+    try {
+        await repository.update(req.params.id, req.body);
+        res.status(200).send({
+            message: 'Cadastro atualizado com sucesso!'
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
+        });
+    }
 };
 
-exports.delete = (req,res,next) => {
-    Cadastro.findOneAndRemove(req.params.id)
-    .then(x => {
+exports.delete = async(req, res, next) => {
+    try {
+        await repository.delete(req.body.id);
         res.status(200).send({
-            message: 'Produto deletado com sucesso'
-        })
-    })
-    res.status(200).send(req.body);
+            message: 'Produto removido com sucesso!'
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
+        });
+    }
 }
