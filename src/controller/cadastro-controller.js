@@ -39,14 +39,9 @@ exports.put = (req,res,next) => {
 exports.delete = (req,res,next) => {
     Cadastro.findOneAndRemove(req.params.id)
     .then(x => {
-        res.status.send({
+        res.status(200).send({
             message: 'Produto deletado com sucesso'
         })
-    }).catch(e => {
-        res.status(400).send({
-            message: 'Erro ao tentar deletar o produto',
-            data: e
-        });
     })
     res.status(200).send(req.body);
 }
