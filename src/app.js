@@ -3,14 +3,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const router = express.Router();
-
+const dotenv = require('dotenv');
+dotenv.config();
 const Cadastro = require('./models/Cadastro');
-
+MONGO_URL= 'mongodb://localhost:27017'
 //conecta com o banco
-mongoose.connect('mongodb+srv://admin:xpto123@cluster0-snge5.mongodb.net/<dbname>?retryWrites=true&w=majority', {
+mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   }).then(()=>{
       console.log('conexao com mongodb feita com sucesso');
   }).catch((err)=>{
